@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Direct Image Access Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-item { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+        img { max-width: 200px; max-height: 200px; border: 2px solid #ddd; }
+        .success { border-color: green !important; }
+        .error { border-color: red !important; }
+    </style>
+</head>
+<body>
+    <h1>Direct Image Access Test</h1>
+    <p>This tests if images can be accessed directly via web URLs</p>
+    
+    <div class="test-item">
+        <h3>Test 1: farmajo.jpeg</h3>
+        <p>URL: <a href="/EMS2/uploads/farmajo.jpeg" target="_blank">/EMS2/uploads/farmajo.jpeg</a></p>
+        <img src="/EMS2/uploads/farmajo.jpeg" alt="farmajo.jpeg" 
+             onload="this.className='success'; console.log('SUCCESS: farmajo.jpeg loaded');" 
+             onerror="this.className='error'; this.alt='FAILED'; console.error('ERROR: farmajo.jpeg failed');">
+    </div>
+    
+    <div class="test-item">
+        <h3>Test 2: candidate_68a7723bc8dcd.jpeg</h3>
+        <p>URL: <a href="/EMS2/uploads/candidate_68a7723bc8dcd.jpeg" target="_blank">/EMS2/uploads/candidate_68a7723bc8dcd.jpeg</a></p>
+        <img src="/EMS2/uploads/candidate_68a7723bc8dcd.jpeg" alt="candidate_68a7723bc8dcd.jpeg" 
+             onload="this.className='success'; console.log('SUCCESS: candidate_68a7723bc8dcd.jpeg loaded');" 
+             onerror="this.className='error'; this.alt='FAILED'; console.error('ERROR: candidate_68a7723bc8dcd.jpeg failed');">
+    </div>
+    
+    <div class="test-item">
+        <h3>Test 3: EMS Logo (Fallback)</h3>
+        <p>URL: <a href="/EMS2/assets/ems_intro.svg" target="_blank">/EMS2/assets/ems_intro.svg</a></p>
+        <img src="/EMS2/assets/ems_intro.svg" alt="ems_intro.svg" 
+             onload="this.className='success'; console.log('SUCCESS: ems_intro.svg loaded');" 
+             onerror="this.className='error'; this.alt='FAILED'; console.error('ERROR: ems_intro.svg failed');">
+    </div>
+    
+    <div class="test-item">
+        <h3>Test 4: Non-existent Image</h3>
+        <p>URL: /EMS2/uploads/nonexistent.jpg</p>
+        <img src="/EMS2/uploads/nonexistent.jpg" alt="nonexistent.jpg" 
+             onload="this.className='success'; console.log('SUCCESS: This should not happen');" 
+             onerror="this.className='error'; this.alt='FAILED (Expected)'; console.log('EXPECTED: nonexistent.jpg failed');">
+    </div>
+    
+    <script>
+    console.log('Direct access test started');
+    
+    // Check results after 3 seconds
+    setTimeout(function() {
+        const images = document.querySelectorAll('img');
+        let results = [];
+        
+        images.forEach((img, index) => {
+            const status = img.className === 'success' ? 'LOADED' : 'FAILED';
+            results.push(`Image ${index + 1}: ${status} - ${img.src}`);
+        });
+        
+        console.log('=== DIRECT ACCESS TEST RESULTS ===');
+        results.forEach(result => console.log(result));
+        
+        // Show results on page
+        const resultsDiv = document.createElement('div');
+        resultsDiv.innerHTML = '<h2>Test Results (Check Console for Details)</h2><ul>' + 
+            results.map(r => '<li>' + r + '</li>').join('') + '</ul>';
+        document.body.appendChild(resultsDiv);
+    }, 3000);
+    </script>
+</body>
+</html>
